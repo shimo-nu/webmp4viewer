@@ -1,5 +1,5 @@
 .directory-link {
-    color: blue; /* ディレクトリリンクの色を青に設定 */
+    color: red; /* ディレクトリリンクの色を青に設定 */
 }
 .file-link {
     color: green; /* ファイルリンクの色を緑に設定 */

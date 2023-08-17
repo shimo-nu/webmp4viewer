@@ -88,31 +88,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     var deleteButtons = document.querySelectorAll('.delete-button');
+    attachDeleteEvent(deleteButtons);
+
+    var deleteSelectedButton = document.querySelector('#delete-selected-files');
+    if (deleteSelectedButton) {
+        deleteSelectedButton.addEventListener('click', deleteSelectedFiles);
+    }
+});
+
+function attachDeleteEvent(deleteButtons) {
     deleteButtons.forEach(function(button) {
         button.addEventListener('click', function() {
-            
             var filePath = this.getAttribute('data-file');
-            var confirmed = confirm(filePath + " を消します。大丈夫ですか？");
-            if (confirmed) {
-                    
-                // サーバーにファイル削除リクエストを送信
-                fetch('/delete_file', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ filePath: filePath })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // サーバからのレスポンスを処理
-                    // ここで再読み込みなどを行う
-                    window.location.href = window.location.href;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
+            showConfirmDialogAndDelete(filePath);
         });
     });
-});
+}
+
+function showConfirmDialogAndDelete(filePath) {
+    var confirmed = confirm(filePath + " を消します。大丈夫ですか？");
+    if (confirmed) {
+        deleteFile(filePath);
+    }
+}
+
+function deleteFile(filePath) {
+    fetch('/delete_file', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ filePath: filePath })
+    })
+    .then(response => response.json())
+    .then(data => {
+        handleDeleteResponse();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function handleDeleteResponse() {
+    window.location.href = window.location.href;
+}
+
+function deleteSelectedFiles() {
+    var selectedVideos = [];
+    var checkboxes = document.querySelectorAll('.video-checkbox:checked');
+    checkboxes.forEach(function(checkbox) {
+        selectedVideos.push(checkbox.value);
+    });
+    var selectedVideosString = selectedVideos.join(', ');
+
+    var confirmed = confirm(selectedVideosString + " を消します。大丈夫ですか？");
+    if (confirmed) {
+        selectedVideos.forEach(function(selectVideo) {
+            deleteFile(selectVideo);
+        });
+    }
+}

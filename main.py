@@ -12,7 +12,6 @@ app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.dirname(__file__))
 FILE_FOLDER = os.path.join(app.config['UPLOAD_FOLDER'], 'files')
 UPLOAD_FOLDER = os.path.join(app.config['UPLOAD_FOLDER'], 'uploads')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4'}
-print(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.secret_key = secrets.token_bytes(32)
@@ -37,9 +36,6 @@ def is_directory(filename):
         path = os.path.join(app.config['UPLOAD_FOLDER'], session['current_directory'], filename)
     else:
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-
-    print(path)
     return os.path.isdir(path)
 
 
@@ -55,7 +51,6 @@ def list_files_recursive(directory, depth=0, max_depth=1):
 
 @app.route('/')
 def index():
-    print(app.config['UPLOAD_FOLDER'])
     files = list_files_in_directory(app.config['UPLOAD_FOLDER'])
     return render_template('index.html', files=files, is_directory=is_directory)
 
@@ -63,7 +58,6 @@ def index():
 def setUploadDirectory():
     folder_path = request.form.get('folderPath')
     # フォルダのパスを使用して適切な処理を行う
-    print(folder_path)
     app.config['UPLOAD_FOLDER'] = folder_path
     # global FILE_FOLDER, UPLOAD_FOLDER
     # FILE_FOLDER = os.path.join(app.config['UPLOAD_FOLDER'], 'files')
@@ -119,7 +113,6 @@ def postSelectedVideos():
 @app.route('/play/multi')
 def multiPlay():
     if 'selected_videos' in session:
-        print()
         return render_template('multi-play.html', video_paths=session['selected_videos'])
     else:
         return "not set videos"
@@ -131,7 +124,6 @@ def uploaded_file(filename):
 
 @app.route('/convert_video/<path:file_path>', methods=['GET', 'POST'])
 def convert_video(file_path):
-    print(file_path)
     # ファイル名を取得
     file_name = os.path.basename(file_path)
     new_file_name = file_name.split('.')[0] + '_re.' + file_name.split('.')[1]
@@ -167,7 +159,10 @@ def deleteFile():
 
     try:
         if file_path:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_path))
+            print("UPLOAD_FOLDER : {}".format(app.config['UPLOAD_FOLDER']))
+            print("Remove {}".format(os.path.join(app.config['UPLOAD_FOLDER'], file_path)))
+
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_path.lstrip('/')))
             # print("remove {}".format(file_path))
             response_data = {'status': 'success', 'message': 'File deleted successfully.'}
         else:
