@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mp4 Viewer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}"/>
+
+</head>
+<body>
+    <h1>Mp4 Viewer</h1>
+
+    <div>
+        <h2>Upload File</h2>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+    <div>
+        <h2>Set Base Directory</h2>
+        <form id="folder-form" method="POST" action="/set/upload_dir">
+            <input type="text" id="folder-path" name="folderPath">
+            <!-- <button type="button" id="select-folder-button">Select Folder</button> -->
+            <button type="submit">Submit</button>
+        </form>
+    
+    </div>
+
+    <div>
+        <h2>Fetch Video Data from Server</h2>
+        <form method="POST" action="/fetch_data">
+            <label for="sim_name">Simulation Name : </label>
+            <input type="text" name="sim_name" required><br>
+            <label for="experiment_name">Experiment Name : </label>
+            <input type="text" name="experiment_name" required><br>
+            <label for="output_dir">Output Directory : </label>
+            <input type="text" value="uploads" name="output_dir"><br>
+            <button type="submit">Fetch Data</button>
+        </form>
+    </div>
+    <hr/>
+    {% if session['current_directory'] %}
+        <h2>Current Directory: {{ session['current_directory'] }}</h2>
+    {% endif %}
+    <!-- {% set current_directory_path = '/'.join(session.get('current_directory', [])) %} -->
+    {% set current_directory_path = session.get('current_directory', '') %}
+    <h2>Browser</h2>
+    <ul>
+        <!-- {% for file in files %}
+            {% if is_directory(file) %}
+                <li>
+                    <h3>ディレクトリ</h3>
+                    <a class="directory-link" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
+                </li>
+            {% else %}
+                {% if is_first_file %}
+                    <li>
+                        <h3>ファイル</h3>
+                        <a class="file-link" href="{{ url_for('play', filename=file) }}">{{ file }}</a>
+                    </li>
+                    {% set is_first_file = false %}
+                {% else %}
+                    <li>
+                        <a class="file-link" href="{{ url_for('play', filename=file) }}">{{ file }}</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}" download>Download</a>
+                </li>
+            {% endif %}
+        {% endfor %} -->
+        <h3>ディレクトリ</h3>
+        {% for file in files %}
+            {% if is_directory(file) %}
+                <li>
+                    <a class="directory-link" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
+                </li>
+            {% endif %}
+
+        {% endfor %}
+        <h3>ファイル</h3>
+        {% for file in files %}
+            {% if not is_directory(file) %}
+                <li>
+                    <div id="video-list" class="file-container"">
+                        <input type="checkbox" class="video-checkbox" value="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file)[:-1] }}">
+                        <a class="file-link" href="{{ url_for('play', filename=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
+                        <a class="download-button" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}" download>Download</a>
+                        <br/>
+                        <button class="delete-button" data-file="{{ current_directory_path ~ '/' ~ file }}">Delete</button>
+                    </div>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+
+
+    </ul>
+
+    <button id="toggle-checkboxes">Toggle Checkboxes</button>
+    <button id="show-selected">Show Selected</button>
+    <button id="encoding">Videos Encoding</button>
+    
+    <br>
+    <a href="/clear_session">戻る</a>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

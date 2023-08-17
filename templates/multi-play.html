@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Videos</title>
+</head>
+<body>
+    <h1>Multiple Videos</h1>
+    
+    {% for video_path in video_paths %}
+    <video id="video" controls autoplay loop width="480" height="320">
+        <source src="/uploads{{ video_path }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {% endfor %}
+    <script src="{{ url_for('static', filename='js/video_control.js') }}"></script>
+    <div>
+        <a href="/clear_session">ホーム</a>
+    </div>
+</body>
+</html>

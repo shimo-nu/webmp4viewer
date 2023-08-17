@@ -1,0 +1,53 @@
+.directory-link {
+    color: blue; /* ディレクトリリンクの色を青に設定 */
+}
+.file-link {
+    color: green; /* ファイルリンクの色を緑に設定 */
+    margin-right: 10px;
+}
+
+.download_button{
+    margin-left: auto;
+}
+
+.directory-link,
+    .file-link,
+    .download_button{
+        text-decoration: none; /* 下線を無くす */
+        transition: transform 0.2s; /* ホバー時の浮き上がりアニメーション */
+    }
+.directory-link:hover,
+    .file-link:hover,
+    .download_button:hover {
+        transform: translateY(-2px); /* ホバー時に少し浮き上がる効果を追加 */
+    }
+
+.video-checkbox {
+    display: none;
+}
+
+.file-container {
+    display: flex;
+    align-items: center;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+
+
+li {
+    list-style-type: none; /* デフォルトのビュレットを非表示にする */
+    margin-bottom: 10px; /* アイテム間の余白を設定 */
+}
+
+/* リストアイテム内のテキストのスタイル */
+li a {
+    font-size: 16px; /* テキストのフォントサイズを設定 */
+}
+hr {
+    border: none;
+    border-top: 2px dotted blue;
+}
