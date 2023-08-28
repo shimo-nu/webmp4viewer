@@ -26,9 +26,16 @@
     display: none;
 }
 
-.file-container {
+.video-item {
     display: flex;
     align-items: center;
+}
+
+.file-container {
+    max-height: 400px; /* 任意の高さ */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
 }
 
 

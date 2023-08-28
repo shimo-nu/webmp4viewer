@@ -11,3 +11,14 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sortableList = document.querySelector('.sortable-list');
+    const sortable = new Sortable(sortableList, {
+        animation: 150,
+        handle: '.sortable-item',
+        onUpdate: function(evt) {
+            // 並び替え完了時の処理を記述
+        }
+    });
+});

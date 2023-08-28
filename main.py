@@ -52,7 +52,7 @@ def list_files_recursive(directory, depth=0, max_depth=1):
 @app.route('/')
 def index():
     files = list_files_in_directory(app.config['UPLOAD_FOLDER'])
-    return render_template('index.html', files=files, is_directory=is_directory)
+    return render_template('index.html', files=files, is_directory=is_directory,  uploads_dir = UPLOAD_FOLDER)
 
 @app.route('/set/upload_dir', methods=['POST'])
 def setUploadDirectory():
@@ -69,10 +69,12 @@ def fetchData():
     sim_name = request.form['sim_name']
     experiment_name = request.form['experiment_name']
     output_dir = request.form['output_dir']
+    print(output_dir)
     if (os.path.isfile('fetch.sh')):
         result = subprocess.run(['bash', 'fetch.sh', sim_name, experiment_name, output_dir], stdout=subprocess.PIPE, text=True)
         generated_maessage = result.stdout.strip()
-        return redirect('/')
+        session.clear()
+        return redirect('/' + sim_name + '/' + experiment_name + '/movie')
     else:
         return "Not found fetch.sh"
 
@@ -80,7 +82,7 @@ def fetchData():
 def clear_session():
     session.clear()
     files = list_files_in_directory(app.config['UPLOAD_FOLDER'])
-    return render_template('index.html', files=files, is_directory=is_directory)
+    return render_template('index.html', files=files, is_directory=is_directory,  uploads_dir = UPLOAD_FOLDER)
 
 @app.route('/<path:directory>/')
 def browse_directory(directory):
@@ -91,7 +93,7 @@ def browse_directory(directory):
         # else:
         session['current_directory'] = directory
         files = list_files_in_directory(dir_path)
-        return render_template('index.html', files=files, is_directory=is_directory)
+        return render_template('index.html', files=files, is_directory=is_directory, uploads_dir = UPLOAD_FOLDER)
     return "Invalid directory."
 
 

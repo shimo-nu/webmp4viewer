@@ -33,7 +33,7 @@
             <label for="experiment_name">Experiment Name : </label>
             <input type="text" name="experiment_name" required><br>
             <label for="output_dir">Output Directory : </label>
-            <input type="text" value="uploads" name="output_dir"><br>
+            <input type="text" value="{{ uploads_dir }}" name="output_dir"><br>
             <button type="submit">Fetch Data</button>
         </form>
     </div>
@@ -69,37 +69,46 @@
             {% endif %}
         {% endfor %} -->
         <h3>ディレクトリ</h3>
-        {% for file in files %}
-            {% if is_directory(file) %}
-                <li>
-                    <a class="directory-link" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
-                </li>
-            {% endif %}
-
-        {% endfor %}
+        <div class="file-container">
+            {% for file in files %}
+                {% if is_directory(file) %}
+                    <li>
+                        <a class="directory-link" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
+                    </li>
+                {% endif %}
+    
+            {% endfor %}
+        </div>
         <h3>ファイル</h3>
-        {% for file in files %}
-            {% if not is_directory(file) %}
-                <li>
-                    <div id="video-list" class="file-container"">
-                        <input type="checkbox" class="video-checkbox" value="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file)[:-1] }}">
-                        <a class="file-link" href="{{ url_for('play', filename=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
-                        <a class="download-button" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}" download>Download</a>
-                        <br/>
-                        <button class="delete-button" data-file="{{ current_directory_path ~ '/' ~ file }}">Delete</button>
-                    </div>
-                </li>
-            {% endif %}
-        {% endfor %}
+        <div class="file-container">
+            {% for file in files %}
+                {% if not is_directory(file) %}
+                    <li>
+                        <div id="video-list" class="video-item"">
+                            <input type="checkbox" class="video-checkbox" value="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file)[:-1] }}">
+                            <a class="file-link" href="{{ url_for('play', filename=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
+                            <a class="download-button" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}" download>Download</a>
+                            <br/>
+                            <button class="delete-button" data-file="{{ current_directory_path ~ '/' ~ file }}">Delete</button>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </div>
 
 
 
     </ul>
-
-    <button id="toggle-checkboxes">Toggle Checkboxes</button>
-    <button id="show-selected">Show Selected</button>
-    <button id="encoding">Videos Encoding</button>
-    <button id="delete-selected-files">Files Delete</button>
+    <div>
+        <button id="toggle-checkboxes">Toggle Checkboxes</button>
+        <button id="select-all">select all</button>
+        <button id="deselect-all">deselect all</button>   
+    </div>
+    <div>
+        <button id="show-selected">Show Selected</button>
+        <button id="encoding">Videos Encoding</button>
+        <button id="delete-selected-files">Files Delete</button>
+    </div>
     
     <br>
     <a href="/clear_session">戻る</a>

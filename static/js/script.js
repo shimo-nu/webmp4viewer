@@ -64,6 +64,28 @@ document.getElementById('show-selected').addEventListener('click', function() {
 
 // script.js
 document.addEventListener('DOMContentLoaded', function() {
+
+    // All select and All deselect
+    var selectAllButton = document.getElementById('select-all');
+    var deselectAllButton = document.getElementById('deselect-all');
+    var checkboxes = document.querySelectorAll('.video-checkbox');
+
+    selectAllButton.addEventListener('click', function() {
+        console.log("onclick");
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = true;
+        });
+    });
+
+    deselectAllButton.addEventListener('click', function() {
+        console.log("onclick");
+
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+    });
+
+
     // const selectFolderButton = document.getElementById('select-folder-button');
     const folderPathInput = document.getElementById('folder-path');
     const folderForm = document.getElementById('folder-form');
@@ -84,9 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // フォームが送信される前にフォルダのパスを設定
         folderPathInput.disabled = false;
     });
-});
 
-document.addEventListener('DOMContentLoaded', function() {
     var deleteButtons = document.querySelectorAll('.delete-button');
     attachDeleteEvent(deleteButtons);
 
@@ -94,6 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (deleteSelectedButton) {
         deleteSelectedButton.addEventListener('click', deleteSelectedFiles);
     }
+
+   
+
 });
 
 function attachDeleteEvent(deleteButtons) {
