@@ -115,7 +115,7 @@ def postSelectedVideos():
 @app.route('/play/multi')
 def multiPlay():
     if 'selected_videos' in session:
-        return render_template('multi-play.html', video_paths=session['selected_videos'])
+        return render_template('multi-play.html', media_paths=session['selected_videos'])
     else:
         return "not set videos"
 @app.route('/uploads/<path:filename>')
@@ -174,4 +174,4 @@ def deleteFile():
 
     return jsonify(response_data)
 if __name__ == '__main__':
-    app.run(debug=True, port=18000)
+    app.run(debug=True, host='0.0.0.0', port=11301)

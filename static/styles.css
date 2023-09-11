@@ -58,3 +58,78 @@ hr {
     border: none;
     border-top: 2px dotted blue;
 }
+
+img {
+    border: 2px solid green;
+    resize: both;
+    max-width: 100%;
+    height: auto;
+}
+
+/* ビデオ要素のスタイル */
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* 他のスタイル */
+
+.text-container {
+    overflow: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+}
+
+/* 行番号を表示するスタイル */
+.text-container iframe {
+    overflow: hidden;
+    border: none;
+}
+
+.text-container iframe body {
+    counter-reset: linenumber;
+}
+
+.text-container iframe pre {
+    counter-increment: linenumber;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.text-container iframe pre::before {
+    content: counter(linenumber);
+    display: inline-block;
+    width: 2em;
+    margin-right: 1em;
+    text-align: right;
+    color: #888;
+    user-select: none;
+}
+
+
+/* ソータブルリストのスタイル */
+.sortable-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* 要素間の間隔を調整 */
+    justify-content: space-between; /* 要素を均等に配置 */
+    padding: 20px; /* 要素間の余白を調整 */
+}
+
+/* ソータブルアイテムのスタイル */
+.sortable-item {
+    width: calc(50% - 10px); /* 幅を50%にし、間隔を差し引いて均等に配置 */
+    border: 1px solid #ddd; /* ボーダーを追加 */
+    padding: 10px; /* 余白を調整 */
+    cursor: grab; /* ドラッグ時のカーソルスタイルを変更 */
+    transition: background-color 0.3s ease-in-out; /* 背景色のトランジションを追加 */
+
+    /* ホバー時のスタイル */
+    &:hover {
+        background-color: #f5f5f5; /* ホバー時の背景色を設定 */
+    }
+}

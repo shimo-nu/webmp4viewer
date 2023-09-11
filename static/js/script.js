@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    
 
     // const selectFolderButton = document.getElementById('select-folder-button');
     const folderPathInput = document.getElementById('folder-path');
@@ -114,8 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (deleteSelectedButton) {
         deleteSelectedButton.addEventListener('click', deleteSelectedFiles);
     }
-
-   
 
 });
 

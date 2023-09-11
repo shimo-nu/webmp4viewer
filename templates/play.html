@@ -2,17 +2,26 @@
 <html>
 <head>
     <title>Video Player</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}"/>
 </head>
 <body>
     <h1>Video Player</h1>
-    <video id="video" controls autoplay loop width="480" height="320">
-        <source src="/uploads/{{ filename }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div id="mediaWrapper">
+        <div id="imageContainer" style="display: none;">
+            <img id="image" src="/uploads/{{ filename }}" alt="Image">
+        </div>
+        <div id="videoContainer" style="display: none;">
+            <video id="video" controls autoplay loop width="480" height="320">
+                <source src="/uploads/{{ filename }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <a href="/convert_video/{{ filename }}">ビデオをエンコーディング</a>    
+        </div>
+        <div id="textContainer" style="display: none;">
+            <iframe src="/uploads/{{ filename }}" frameborder="0" width="100%" height="300"></iframe>
+        </div>
 
-
-    <a href="/convert_video/{{ filename }}">ビデオをエンコーディング</a>    
     <script src="{{ url_for('static', filename='js/video_control.js') }}"></script>
-    
+
 </body>
 </html>
