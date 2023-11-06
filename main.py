@@ -26,6 +26,7 @@ def list_files_in_directory(directory):
         file_path = os.path.join(directory, filename)
         if os.path.isfile(file_path) or os.path.isdir(file_path):
             file_list.append(filename)
+    file_list.sort()
     return file_list
 
 
@@ -47,6 +48,7 @@ def list_files_recursive(directory, depth=0, max_depth=1):
             file_list.append((filename, depth))
             if depth < max_depth and os.path.isdir(file_path):
                 file_list.extend(list_files_recursive(file_path, depth + 1, max_depth))
+    file_list.sort()
     return file_list
 
 @app.route('/')
@@ -87,6 +89,7 @@ def clear_session():
 @app.route('/<path:directory>/')
 def browse_directory(directory):
     dir_path = os.path.join(app.config['UPLOAD_FOLDER'], directory)
+    print(f"dir_path : {dir_path}")
     if os.path.isdir(dir_path):
         # if 'current_directory' in session:
         #     session['current_directory'].append(directory)
@@ -118,9 +121,6 @@ def multiPlay():
         return render_template('multi-play.html', media_paths=session['selected_videos'])
     else:
         return "not set videos"
-@app.route('/uploads/<path:filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 
@@ -142,6 +142,11 @@ def convert_video(file_path):
     else:
         return redirect(url_for('play', filename=os.path.join(directory, new_file_name)))
 
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -153,6 +158,18 @@ def upload_file():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return redirect('/')
+    
+@app.route('/download/<path:filename>', methods=['GET'])
+def download_file(filename):
+    directory = os.path.dirname(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    filename = os.path.basename(filename)
+    if not os.path.isfile(os.path.join(directory, filename)):
+        return "File not found", 404
+    print(f"dirname : {directory}")
+    print(f"basename : {filename}")
+    return send_from_directory(directory=directory, path=filename)
+    # return redirect('/')
+
 
 @app.route('/delete_file', methods=['POST'])
 def deleteFile():
@@ -173,5 +190,7 @@ def deleteFile():
         response_data = {'status': 'error', 'message': str(e)}
 
     return jsonify(response_data)
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=11301)

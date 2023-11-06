@@ -45,29 +45,6 @@
     {% set current_directory_path = session.get('current_directory', '') %}
     <h2>Browser</h2>
     <ul>
-        <!-- {% for file in files %}
-            {% if is_directory(file) %}
-                <li>
-                    <h3>ディレクトリ</h3>
-                    <a class="directory-link" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
-                </li>
-            {% else %}
-                {% if is_first_file %}
-                    <li>
-                        <h3>ファイル</h3>
-                        <a class="file-link" href="{{ url_for('play', filename=file) }}">{{ file }}</a>
-                    </li>
-                    {% set is_first_file = false %}
-                {% else %}
-                    <li>
-                        <a class="file-link" href="{{ url_for('play', filename=file) }}">{{ file }}</a>
-                    </li>
-                {% endif %}
-                <li>
-                    <a href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}" download>Download</a>
-                </li>
-            {% endif %}
-        {% endfor %} -->
         <h3>ディレクトリ</h3>
         <div class="file-container">
             {% for file in files %}
@@ -87,7 +64,7 @@
                         <div id="video-list" class="video-item"">
                             <input type="checkbox" class="video-checkbox" value="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file)[:-1] }}">
                             <a class="file-link" href="{{ url_for('play', filename=current_directory_path ~ '/' ~ file) }}">{{ file }}</a>
-                            <a class="download-button" href="{{ url_for('browse_directory', directory=current_directory_path ~ '/' ~ file) }}" download>Download</a>
+                            <a class="download-button" href="{{ url_for('download_file', filename=current_directory_path ~ '/' ~ file) }}" download="{{ file }}">Download</a>
                             <br/>
                             <button class="delete-button" data-file="{{ current_directory_path ~ '/' ~ file }}">Delete</button>
                         </div>
@@ -111,7 +88,7 @@
     </div>
     
     <br>
-    <a href="/clear_session">戻る</a>
+    <a href="/clear_session">ベースディレクトリに戻る</a>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
